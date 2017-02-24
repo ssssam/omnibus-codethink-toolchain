@@ -55,5 +55,8 @@ user access:
 Builds will then store all intermediate files in the ./local directory, and
 will not require root privileges to install.
 
+### Optional stuff
 
+You can change the number of parallel workers with this for example:
 
+    omnibus build codethink-toolchain --override workers:2
