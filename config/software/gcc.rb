@@ -39,6 +39,14 @@ build do
     configure_command += [
       "--with-gmp-include=/usr/include/gmp",
       "--with-mpfr-include=/usr/include/mpfr"]
+
+    # The with_standard_compiler_flags function sets:
+    #     CC=gcc -m64 -static-libgcc
+    # It sets nothing for C++, so the build fails when trying to link some 32-bit C++
+    # code against 64-bit C libraries.
+    # This could possibly be upstreamed in Omnibus itself.
+    # May also need doing for Fortran.
+    env["CXX"] = "g++ -m64"
   end
 
   command configure_command.join(" "), env: env
