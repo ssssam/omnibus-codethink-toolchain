@@ -19,6 +19,11 @@ default_version "sam/fortran-legacy-support-7_0-20170222"
 
 source git: "https://github.com/CodethinkLabs/gcc/"
 
+dependency "gmp"
+dependency "mpfr"
+dependency "mpc"
+dependency "libiconv"
+
 build do
   # Setup a default environment from Omnibus - you should use this Omnibus
   # helper everywhere. It will become the default in the future.
@@ -26,7 +31,7 @@ build do
 
   configure_command = [
     "./configure",
-    "--prefix=#{install_dir}/",
+    "--prefix=#{install_dir}/embedded",
     "--disable-nls",
     "--enable-languages=c,c++,fortran",
     "--disable-multilib"]
