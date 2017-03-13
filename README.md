@@ -28,7 +28,10 @@ All code is licensed under the
 ## Instructions
 
 This README doesn't cover installing the necessary dependencies. In brief
-you need a working GNU toolchain, Ruby, Bundler and Omnibus. Maybe more.
+you need a working GNU toolchain, GNU Flex, Ruby, Bundler and Omnibus. Maybe
+more.
+
+On Red Hat style systems we also require the rpm-build package.
 
 ### Building on a dedicated build worker
 
