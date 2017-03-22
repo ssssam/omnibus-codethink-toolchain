@@ -32,8 +32,13 @@ build do
   configure_command = [
     "./configure",
     "--prefix=#{install_dir}/embedded",
-    "--disable-nls",
     "--enable-languages=c,c++,fortran",
+    # Useful C++ debugging feature, see `-fvtable-verify=` option.
+    "--enable-vtable-verify",
+    # This is (a) for speed, (b) because the embedded libintl breaks on AIX
+    "--disable-nls",
+    # Dependency requirements are higher on x86 when multilib is enabled,
+    # we may need a multilib compiler soon though.
     "--disable-multilib"]
 
   if solaris?
