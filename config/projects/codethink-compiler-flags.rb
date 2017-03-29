@@ -26,8 +26,7 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
     else {}
     end
 
-  env.merge(compiler_flags).
+  return env.merge(compiler_flags).
     merge("CXXFLAGS" => compiler_flags["CFLAGS"]).
     merge("CPPFLAGS" => compiler_flags["CFLAGS"])
-  return env
 end
