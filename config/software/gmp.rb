@@ -24,7 +24,7 @@ source url: "https://ftp.gnu.org/gnu/gmp/gmp-#{version}.tar.bz2"
 relative_path "gmp-#{version}"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
   if solaris2?
     env["ABI"] = "32"

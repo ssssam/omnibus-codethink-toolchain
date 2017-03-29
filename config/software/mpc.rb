@@ -27,7 +27,7 @@ source url: "https://ftp.gnu.org/gnu/mpc/mpc-#{version}.tar.gz"
 relative_path "mpc-#{version}"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
   configure_command = ["./configure",
                        "--prefix=#{install_dir}/embedded"]

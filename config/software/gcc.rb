@@ -25,9 +25,7 @@ dependency "mpc"
 dependency "libiconv"
 
 build do
-  # Setup a default environment from Omnibus - you should use this Omnibus
-  # helper everywhere. It will become the default in the future.
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
   configure_command = [
     "./configure",

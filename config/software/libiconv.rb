@@ -30,7 +30,7 @@ source url: "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-#{version}.tar.gz",
 relative_path "libiconv-#{version}"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
 #  update_config_guess(target: "build-aux")
 #  update_config_guess(target: "libcharset/build-aux")

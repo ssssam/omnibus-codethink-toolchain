@@ -31,3 +31,5 @@ dependency "version-manifest"
 
 exclude "**/.git"
 exclude "**/bundler/git"
+
+require_relative "codethink-compiler-flags.rb"
