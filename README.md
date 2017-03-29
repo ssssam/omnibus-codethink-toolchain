@@ -45,9 +45,10 @@ command as root:
 
 If you are a developer running this on your laptop, you hopefully balked
 at the idea of running a random command as root. To test things locally,
-you'll want to first edit `omnibus.rb` and uncomment this line:
+you'll probably want to download everything into the current directory,
+which you can do by adding this to the Omnibus command line:
 
-    base_dir './local`
+    base_dir --override base_dir:./local
 
 You'll also need to precreate the target install directory and give your
 user access:
@@ -60,6 +61,5 @@ will not require root privileges to install.
 
 ### Optional stuff
 
-You can change the number of parallel workers with this for example:
-
-    omnibus build codethink-toolchain --override workers:2
+You can change the number of parallel workers by adding `workers:2` to the
+--override parameter (which is a comma-separated list)
