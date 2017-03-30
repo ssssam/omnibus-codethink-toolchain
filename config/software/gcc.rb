@@ -39,8 +39,8 @@ build do
 
   if not solaris? and not aix?
     # Useful C++ debugging feature, see `-fvtable-verify=` option.
-    "--enable-vtable-verify",
-  endif
+    configure_command += ["--enable-vtable-verify"]
+  end
 
   if solaris?
     # Only the GNU version of M4 can be used
