@@ -62,4 +62,4 @@ will not require root privileges to install.
 ### Optional stuff
 
 You can change the number of parallel workers by adding `workers:2` to the
---override parameter (which is a comma-separated list)
+--override parameter (which is a semicolon-separated list)
