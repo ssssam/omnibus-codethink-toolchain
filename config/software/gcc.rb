@@ -31,30 +31,20 @@ build do
     "./configure",
     "--prefix=#{install_dir}/embedded",
     "--enable-languages=c,c++,fortran",
-    # Useful C++ debugging feature, see `-fvtable-verify=` option.
-    "--enable-vtable-verify",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
     # Dependency requirements are higher on x86 when multilib is enabled,
     # we may need a multilib compiler soon though.
     "--disable-multilib"]
 
+  if not solaris? and not aix?
+    # Useful C++ debugging feature, see `-fvtable-verify=` option.
+    "--enable-vtable-verify",
+  endif
+
   if solaris?
     # Only the GNU version of M4 can be used
     env["M4"] = "gm4"
-    # The Solaris packages for GMP and MPFR put the headers in non-standard
-    # places.
-    configure_command += [
-      "--with-gmp-include=/usr/include/gmp",
-      "--with-mpfr-include=/usr/include/mpfr"]
-
-    # The with_standard_compiler_flags function sets:
-    #     CC=gcc -m64 -static-libgcc
-    # It sets nothing for C++, so the build fails when trying to link some 32-bit C++
-    # code against 64-bit C libraries.
-    # This could possibly be upstreamed in Omnibus itself.
-    # May also need doing for Fortran.
-    env["CXX"] = "g++ -m64"
   end
 
   command configure_command.join(" "), env: env

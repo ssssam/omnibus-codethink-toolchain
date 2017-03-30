@@ -12,14 +12,17 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
       # For now we don't force a 64-bit build, it probably makes sense to do that though.
       {
         "CC" => "gcc",
-        "CXX" => "gcc",
+        "CXX" => "g++",
         "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
         "LDFLAGS" => "-L#{install_dir}/embedded/lib",
         "LD" => "ld",
       }
     when "solaris2"
+      # We do a 32-bit build for now, something breaks in GMP when
+      # doing a 64-bit build.
       {
         "CC" => "gcc",
+        "CXX" => "g++",
         "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
         "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
       }
