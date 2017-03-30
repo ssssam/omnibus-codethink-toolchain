@@ -2,6 +2,9 @@
 #
 # To make it available to all software definitions, it's imported from the
 # project definition using `require_relative`.
+#
+# The standard Omnibus flags maybe here:
+#   https://github.com/chef/omnibus/blob/master/lib/omnibus/software.rb#L653
 
 def with_codethink_compiler_flags(platform, env = {}, opts = {})
   env = with_standard_compiler_flags(env = env, opts = opts)
@@ -20,13 +23,11 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
         "OBJECT_MODE" => "64",
       }
     when "solaris2"
-      # We do a 32-bit build for now, something breaks in GMP when
-      # doing a 64-bit build.
       {
         "CC" => "gcc",
         "CXX" => "g++",
-        "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
         "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
+        "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
       }
     else {}
     end

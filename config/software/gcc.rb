@@ -42,9 +42,10 @@ build do
     "--disable-bootstrap",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
-    # Dependency requirements are higher on x86 when multilib is enabled,
-    # we may need a multilib compiler soon though.
-    "--disable-multilib"]
+    # It's required that we can produce 32- and 64-bit binaries where
+    # we have 64-bit compiler binaries
+    "--enable-multilib",
+    ]
 
   if not solaris? and not aix?
     # Useful C++ debugging feature, see `-fvtable-verify=` option.
