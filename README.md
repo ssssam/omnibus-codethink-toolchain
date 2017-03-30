@@ -48,7 +48,7 @@ at the idea of running a random command as root. To test things locally,
 you'll probably want to download everything into the current directory,
 which you can do by adding this to the Omnibus command line:
 
-    base_dir --override base_dir:./local
+    --override base_dir:./local
 
 You'll also need to precreate the target install directory and give your
 user access:
@@ -61,5 +61,8 @@ will not require root privileges to install.
 
 ### Optional stuff
 
-You can change the number of parallel workers by adding `workers:2` to the
---override parameter (which is a semicolon-separated list)
+You can change the number of parallel workers by adding `workers:N` to the
+--override parameter. For example, to set a base dir of ./local and enforce
+`make -j 2`, you would run:
+
+    omnibus build codethink-toolchain --override base_dir:./local workers:2
