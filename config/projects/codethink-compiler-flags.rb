@@ -8,14 +8,16 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
   compiler_flags = 
     case platform
     when "aix"
-      # Use GCC instead of xlC on AIX.
-      # For now we don't force a 64-bit build, it probably makes sense to do that though.
+      # Chef Software use the IBM compiler on AIX, but it's probably more
+      # reliable for us to compile GCC with GCC.
       {
-        "CC" => "gcc",
-        "CXX" => "g++",
+        "ARFLAGS" => "-X64",
+        "CC" => "gcc -maix64",
+        "CXX" => "g++ -maix64",
         "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
         "LDFLAGS" => "-L#{install_dir}/embedded/lib",
         "LD" => "ld",
+        "OBJECT_MODE" => "64",
       }
     when "solaris2"
       # We do a 32-bit build for now, something breaks in GMP when
