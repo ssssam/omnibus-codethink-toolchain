@@ -27,6 +27,12 @@ dependency "libiconv"
 build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
+  if aix?
+    patch_env = env.dup
+    patch_env["PATH"] = "/opt/freeware/bin:#{env['PATH']}"
+    patch source: "gcc-aix-genautomata-memory-limit.patch", env: patch_env
+  end
+
   configure_command = [
     "./configure",
     "--prefix=#{install_dir}/embedded",
@@ -45,6 +51,11 @@ build do
   if solaris?
     # Only the GNU version of M4 can be used
     env["M4"] = "gm4"
+  end
+
+  if aix?
+    # Only the GNU version of M4 can be used
+    env["M4"] = "/opt/freeware/bin/m4"
   end
 
   command configure_command.join(" "), env: env
