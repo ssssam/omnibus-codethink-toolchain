@@ -37,6 +37,9 @@ build do
     "./configure",
     "--prefix=#{install_dir}/embedded",
     "--enable-languages=c,c++,fortran",
+    # The bootstrap functions as a self-test, but we assume that if you are
+    # building a package you already tested the commit being built.
+    "--disable-bootstrap",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
     # Dependency requirements are higher on x86 when multilib is enabled,
