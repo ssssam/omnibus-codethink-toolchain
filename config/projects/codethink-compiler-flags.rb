@@ -12,9 +12,9 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
       # reliable for us to compile GCC with GCC.
       {
         "ARFLAGS" => "-X64",
-        "CC" => "gcc -maix64",
-        "CXX" => "g++ -maix64",
-        "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
+        "CC" => "gcc",
+        "CXX" => "g++",
+        "CFLAGS" => "-maix64 -I#{install_dir}/embedded/include -O2",
         "LDFLAGS" => "-L#{install_dir}/embedded/lib",
         "LD" => "ld",
         "OBJECT_MODE" => "64",
