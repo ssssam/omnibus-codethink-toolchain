@@ -26,6 +26,10 @@ relative_path "gmp-#{version}"
 build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
+  if aix?
+    env["ABI"] = "32"
+  end
+
   configure_command = ["./configure",
                        "--prefix=#{install_dir}/embedded"]
 

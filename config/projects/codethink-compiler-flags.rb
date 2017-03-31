@@ -8,19 +8,33 @@
 
 def with_codethink_compiler_flags(platform, env = {}, opts = {})
   env = with_standard_compiler_flags(env = env, opts = opts)
+
   compiler_flags = 
     case platform
     when "aix"
       # Chef Software use the IBM compiler on AIX, but it's probably more
       # reliable for us to compile GCC with GCC.
+      #
+      # We build a 32-bit GCC on AIX. A 64-bit compile is apparently
+      # unsupported[1]. Certainly, adding -maix64 to CFLAGS, CXXFLAGS
+      # and FCFLAGS isn't enough because some of GCC's nested configure
+      # scripts ignore them. (If you see "redefined symbol" errors for
+      # math functions like fabsl() while building libstdc++, check the
+      # relevant config.log -- probably the configure tests failed because
+      # it ignored CXXFLAGS). Passing --host=ppc64-ibm-aix7.2 doesn't
+      # achieve anything, patching the GCC build system to add appropriate
+      # flags when building for ppc64 on AIX is probably the way forward
+      # if we do need to fix this.
+      #
+      # [1]. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25119
       {
-        "ARFLAGS" => "-X64",
+	"ARFLAGS" => "",  # overriding -X64
         "CC" => "gcc",
         "CXX" => "g++",
-        "CFLAGS" => "-maix64 -I#{install_dir}/embedded/include -O2",
+        "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
         "LDFLAGS" => "-L#{install_dir}/embedded/lib",
         "LD" => "ld",
-        "OBJECT_MODE" => "64",
+	"OBJECT_MODE" => "32"
       }
     when "solaris2"
       {
