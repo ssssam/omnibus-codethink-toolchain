@@ -50,3 +50,22 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
     merge("CXXFLAGS" => compiler_flags["CFLAGS"]).
     merge("CPPFLAGS" => compiler_flags["CFLAGS"])
 end
+
+# This is a hack to force Omnibus to use RPM packaging on AIX instead of
+# BFF packaging. I know nothing about BFF except that we don't use it, and
+# that Omnibus requires passwordless `sudo` access to be able to produce such a
+# package.
+#
+# A neater fix would be to modify Omnibus upstream to allow choosing a
+# different package format.
+module Omnibus
+  module Packager
+    PLATFORM_PACKAGER_MAP = {
+      "rhel"     => RPM,
+      "aix"      => RPM,
+      "solaris"  => Solaris,
+      "ips"      => IPS,
+    }.freeze
+  end
+end
+
