@@ -42,10 +42,19 @@ build do
     "--disable-bootstrap",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
-    # It's required that we can produce 32- and 64-bit binaries where
-    # we have 64-bit compiler binaries
-    "--enable-multilib",
     ]
+
+  # Ideally we want to be able to produce 32- and 64-bit binaries on all
+  # platforms. Currently the multilib build for GCC on AIX is broken so
+  # we can only produce 32-bit versions of the support libraries on that
+  # platform, and thus only 32-bit binaries. The first issue appears to be
+  # that both 32-bit and 64-bit AIX are called powerpc-ibm-aix7.2.0.0 so
+  # the 32-bit and 64-bit versions of the libraries are muddled together.
+  if aix?
+    configure_command += ["--disable-multilib"]
+  else
+    configure_command += ["--enable-multilib"]
+  end
 
   if not solaris? and not aix?
     # Useful C++ debugging feature, see `-fvtable-verify=` option.
