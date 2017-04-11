@@ -15,7 +15,7 @@
 #
 
 name "gcc"
-default_version "sam/fortran-legacy-support-7_0-20170322"
+default_version "sam/fortran-legacy-support-7_0-20170411"
 
 source git: "https://github.com/CodethinkLabs/gcc/"
 
