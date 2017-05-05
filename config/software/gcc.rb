@@ -24,6 +24,10 @@ dependency "mpfr"
 dependency "mpc"
 dependency "libiconv"
 
+if solaris?
+  dependency "binutils"
+end
+
 build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
@@ -64,6 +68,10 @@ build do
   if solaris?
     # Only the GNU version of M4 can be used
     env["M4"] = "gm4"
+    # Configure with GNU linker instead of Solaris (default)
+    configure_command += ["--with-gnu-ld", "--with-ld=#{install_dir}/embedded/bin/ld"]
+    # Configure with GNU assembler instead of Solaris (default)
+    configure_command += ["--with-gnu-as", "--with-as=#{install_dir}/embedded/bin/as"]
   end
 
   if aix?
