@@ -24,6 +24,10 @@ dependency "mpfr"
 dependency "mpc"
 dependency "libiconv"
 
+if solaris?
+  dependency "binutils"
+end
+
 build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
