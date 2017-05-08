@@ -1,19 +1,17 @@
-# Codethink's example Omnibus packaging for the GNU Toolchain
+# Codethink's Omnibus packaging for the GNU Toolchain
 
 This is an example of building and packaging the GNU toolchain on multiple
 platforms using Chef Software's [Omnibus](https://github.com/chef/omnibus/).
 
 Our aim is to support the C, C++ and Fortran compilers from GCC version 7 on
-several platforms.
+several platforms, including:
 
-  * Red Hat Linux 6
-  * Oracle Solaris 12.5
-  * IBM AIX 7.3
+  * Red Hat Linux
+  * Oracle Solaris
+  * IBM AIX
 
-Only native building is supported. We aim for working multilib support so
+Only native compilers are supported. We aim for working multilib support so
 that our compilers can produce both 32-bit and 64-bit binaries.
-
-*This a work in progress, do not use for anything important yet!*
 
 This project is not directly based on the Chef Software
 [omnibus-software](https://github.com/chef/omnibus-software)
