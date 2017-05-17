@@ -43,11 +43,16 @@ build do
     ]
 
   # Ideally we want to be able to produce 32- and 64-bit binaries on all
-  # platforms. Currently the multilib build for GCC on AIX is broken so
-  # we can only produce 32-bit versions of the support libraries on that
-  # platform, and thus only 32-bit binaries. The first issue appears to be
-  # that both 32-bit and 64-bit AIX are called powerpc-ibm-aix7.2.0.0 so
-  # the 32-bit and 64-bit versions of the libraries are muddled together.
+  # platforms.
+  #
+  # Currently the multilib build for GCC on AIX is broken so we can only
+  # produce 32-bit versions of the support libraries on that platform, and thus
+  # only 32-bit binaries. The first issue appears to be that both 32-bit and
+  # 64-bit AIX are called powerpc-ibm-aix7.2.0.0 so the 32-bit and 64-bit
+  # versions of the libraries are muddled together.
+  #
+  # There's actually no support for multilib on Solaris at this point.
+  # Enabling it is harmless but we still only get the 32bit libraries.
   if aix?
     configure_command += ["--disable-multilib"]
   else

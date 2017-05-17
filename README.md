@@ -79,20 +79,23 @@ package on an x86_32 host instead. Multilib should work there too.
 
 ### sparc-sun-solaris2.11
 
-We build 32-bit toolchain binaries. The compilers default to producing 32-bit
-binaries, but multilib is supported and so you can tell them to output 32-bit
-binaries by passing `-m32`. This is a big-endian platform.
+We build 32-bit toolchain binaries and the compilers default to producing
+32-bit binaries. You can pass `-m64` to produce 64-bit binaries. However,
+multilib is not supported on this platform in GCC 7 and so none of the
+necessary support libraries (libgcc_s, libstdc++, etc.) will be available
+for 64-bit code.
 
 Some (e.g. [Gentoo](https://wiki.gentoo.org/wiki/Sparc/Multilib)) say 32-bit is
 still preferred on Solaris except for processes that need more than 4GB data or
 where performance will be better. Performance might be better with 64-bit
 toolchain binaries, but I haven't tested that.
 
-Building 64-bit toolchain binaries proved difficult. Simply passing
---host=sparc64-... to configure scripts has no effect, which seems wrong.
-Forcibly adding `-m64` to the compiler flags can lead to 64-bit toolchain
-binaries, but it breaks multilib builds so you can then *only* produce 64-bit
-binaries.
+It's seems possible to produce 64-bit toolchain binaries and support libraries
+if need be. Passing --host=sparc64-... to configure scripts has no effect.
+Forcibly adding `-m64` to the compiler flags will get you a 64-bit build of
+the toolchain and support libraries that seems to work. This will need to
+be installed into a different prefix than your 32-bit compiler, since it
+is not using multilib.
 
 GCC has its own notes about the
 [Solaris operating system](https://gcc.gnu.org/install/specific.html#x-x-solaris2)
@@ -101,14 +104,18 @@ and the [SPARC processor family](https://gcc.gnu.org/install/specific.html#sparc
 ### powerpc-ibm-aix7.2
 
 We build 32-bit toolchain binaries. The compiler doesn't yet support multilib,
-but we hope to have that soon.
+there seem to be issues with this on AIX although the [GCC manual's 'configure'
+section](https://gcc.gnu.org/install/configure.html) does suggest that it is
+supported on this platforn.
 
-It's not clear if GCC actually supports 64-bit AIX binaries.
-See this [bug from 2005](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25119)
-for example. Passing `--host=ppc64-` has no effect. I did try forcibly adding
-`-maix64` to the compile flags, `-X64` to the link and archive flags, and
-`OBJECT_MODE=64` but some of these lost along the way and the build eventually
-fails.
+Building 64-bit toolchain binaries on AIX appears to be unsupported upstream
+at the time of writing.  See this [bug from
+2005](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25119) for example. Passing
+`--host=ppc64-` to configure has no effect. Forcibly adding `-maix64` to the
+compile flags, `-X64` to the link and archive flags, and `OBJECT_MODE=64` in
+the environment might work but some of these flags get lost by the nested
+configure scripts and the build eventually fails due to having a mix of 32
+and 64 bit binaries.
 
 GCC has its own notes about the [AIX operating
 system](https://gcc.gnu.org/install/specific.html#x-ibm-aix).
