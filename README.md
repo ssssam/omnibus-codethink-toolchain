@@ -3,15 +3,12 @@
 This is an example of building and packaging the GNU toolchain on multiple
 platforms using Chef Software's [Omnibus](https://github.com/chef/omnibus/).
 
-Our aim is to support the C, C++ and Fortran compilers from GCC version 7 on
+Our aim is to provide the C, C++ and Fortran compilers from GCC version 7 on
 several platforms, including:
 
   * Red Hat Linux
   * Oracle Solaris
   * IBM AIX
-
-Only native compilers are supported. We aim for working multilib support so
-that our compilers can produce both 32-bit and 64-bit binaries.
 
 This project is not directly based on the Chef Software
 [omnibus-software](https://github.com/chef/omnibus-software)
@@ -80,22 +77,13 @@ package on an x86_32 host instead. Multilib should work there too.
 ### sparc-sun-solaris2.11
 
 We build 32-bit toolchain binaries and the compilers default to producing
-32-bit binaries. You can pass `-m64` to produce 64-bit binaries. However,
-multilib is not supported on this platform in GCC 7 and so none of the
-necessary support libraries (libgcc_s, libstdc++, etc.) will be available
-for 64-bit code.
+32-bit binaries. You can pass `-m64` to produce 64-bit binaries, and multilib
+is supported so this should work for all cases. This is a big-endian platform.
 
 Some (e.g. [Gentoo](https://wiki.gentoo.org/wiki/Sparc/Multilib)) say 32-bit is
 still preferred on Solaris except for processes that need more than 4GB data or
 where performance will be better. Performance might be better with 64-bit
 toolchain binaries, but I haven't tested that.
-
-It's seems possible to produce 64-bit toolchain binaries and support libraries
-if need be. Passing --host=sparc64-... to configure scripts has no effect.
-Forcibly adding `-m64` to the compiler flags will get you a 64-bit build of
-the toolchain and support libraries that seems to work. This will need to
-be installed into a different prefix than your 32-bit compiler, since it
-is not using multilib.
 
 GCC has its own notes about the
 [Solaris operating system](https://gcc.gnu.org/install/specific.html#x-x-solaris2)
