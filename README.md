@@ -29,28 +29,20 @@ more.
 
 On Red Hat style systems we also require the rpm-build package.
 
-### Building on a dedicated build worker
+### Running a build
 
-By default Omnibus operates as a system build service, which is useful on
-dedicated build machines. To run in this mode, just execute the following
-command as root:
-
-    omnibus build codethink-toolchain
-
-### Test builds for developers
-
-If you are a developer running this on your laptop, you hopefully balked
-at the idea of running a random command as root. To test things locally,
-you'll probably want to download everything into the current directory,
-which you can do by adding this to the Omnibus command line:
-
-    --override base_dir:./local
-
-You'll also need to precreate the target install directory and give your
-user access:
+You can run Omnibus from your own user account, or some kind of dedicated
+'build' user if you prefer. Omnibus requires access to the package install
+directory which is set as `/opt/codethink` so you'll need to create this
+in advance and give write access to the correct user. For example:
 
     sudo mkdir /opt/codethink-toolchain
     sudo chown $(whoami):$(whoami) /opt/codethink-toolchain
+
+Omnibus defaults to using /var/cache/omnibus for its intermediate files. You
+can make it use a local directory instead by adding this to the commandline:
+
+    --override base_dir:./local
 
 Builds will then store all intermediate files in the ./local directory, and
 will not require root privileges to install.
