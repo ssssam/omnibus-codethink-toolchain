@@ -68,9 +68,10 @@ package on an x86_32 host instead. Multilib should work there too.
 
 ### sparc-sun-solaris2.11
 
-We build 32-bit toolchain binaries and the compilers default to producing
-32-bit binaries. You can pass `-m64` to produce 64-bit binaries, and multilib
-is supported so this should work for all cases. This is a big-endian platform.
+We build 32-bit toolchain binaries, but the compilers default to producing
+64-bit SPARCv9 output. You can pass `-m32` to produce 32-bit binaries instead,
+and multilib is supported so this should work for all cases. This is a
+big-endian platform.
 
 Some (e.g. [Gentoo](https://wiki.gentoo.org/wiki/Sparc/Multilib)) say 32-bit is
 still preferred on Solaris except for processes that need more than 4GB data or
