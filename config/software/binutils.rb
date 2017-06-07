@@ -27,7 +27,7 @@ build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
 
   configure_command = ["./configure",
-                       "--prefix=#{install_dir}/embedded"]
+                       "--prefix=#{install_dir}"]
 
   command configure_command.join(" "), env: env
   make "-j #{workers}", env: env

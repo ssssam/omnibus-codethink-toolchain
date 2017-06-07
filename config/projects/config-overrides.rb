@@ -31,8 +31,8 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
 	"ARFLAGS" => "",  # overriding -X64
         "CC" => "gcc",
         "CXX" => "g++",
-        "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
-        "LDFLAGS" => "-L#{install_dir}/embedded/lib",
+        "CFLAGS" => "-I#{install_dir}/include -O2",
+        "LDFLAGS" => "-L#{install_dir}/lib",
         "LD" => "ld",
 	"OBJECT_MODE" => "32"
       }
@@ -40,8 +40,8 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
       {
         "CC" => "gcc",
         "CXX" => "g++",
-        "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
-        "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
+        "CFLAGS" => "-I#{install_dir}/include -O2",
+        "LDFLAGS" => "-R#{install_dir}/lib -L#{install_dir}/lib",
       }
     else {}
     end

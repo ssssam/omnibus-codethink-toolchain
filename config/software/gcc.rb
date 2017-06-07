@@ -33,7 +33,7 @@ build do
 
   configure_command = [
     "./configure",
-    "--prefix=#{install_dir}/embedded",
+    "--prefix=#{install_dir}",
     "--enable-languages=c,c++,fortran",
     # The bootstrap functions as a self-test, but we assume that if you are
     # building a package you already tested the commit being built.
@@ -80,9 +80,9 @@ build do
     # Only the GNU version of M4 can be used
     env["M4"] = "gm4"
     # Configure with GNU linker instead of Solaris (default)
-    configure_command += ["--with-gnu-ld", "--with-ld=#{install_dir}/embedded/bin/ld"]
+    configure_command += ["--with-gnu-ld", "--with-ld=#{install_dir}/bin/ld"]
     # Configure with GNU assembler instead of Solaris (default)
-    configure_command += ["--with-gnu-as", "--with-as=#{install_dir}/embedded/bin/as"]
+    configure_command += ["--with-gnu-as", "--with-as=#{install_dir}/bin/as"]
   end
 
   if aix?

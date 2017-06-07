@@ -31,7 +31,7 @@ build do
   end
 
   configure_command = ["./configure",
-                       "--prefix=#{install_dir}/embedded"]
+                       "--prefix=#{install_dir}"]
 
   command configure_command.join(" "), env: env
   make "-j #{workers}", env: env

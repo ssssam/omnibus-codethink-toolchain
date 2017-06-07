@@ -52,6 +52,6 @@ build do
   pmake = "-j #{workers}"
   make "#{pmake}", env: env
   make "#{pmake} install-lib" \
-          " libdir=#{install_dir}/embedded/lib/" \
-          " includedir=#{install_dir}/embedded/include", env: env
+          " libdir=#{install_dir}/lib/" \
+          " includedir=#{install_dir}/include", env: env
 end
