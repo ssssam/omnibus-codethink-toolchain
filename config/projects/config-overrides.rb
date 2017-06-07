@@ -43,7 +43,11 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
         "CFLAGS" => "-I#{install_dir}/include -O2",
         "LDFLAGS" => "-R#{install_dir}/lib -L#{install_dir}/lib",
       }
-    else {}
+    else
+      {
+        "LDFLAGS" => "-Wl,-rpath,#{install_dir}/lib -L#{install_dir}/lib",
+        "CFLAGS" => "-I#{install_dir}/include -O2",
+      }
     end
 
   return env.merge(compiler_flags).
