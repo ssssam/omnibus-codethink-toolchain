@@ -18,8 +18,9 @@ and the small size of the packaging instructions means it's easier to
 duplicate things here than it is to maintain non-upstreamable forks of
 the Chef Software projects.
 
-All code is licensed under the
-[Apache License version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+All code in this repository is licensed under the
+[Apache License version 2.0](https://www.apache.org/licenses/LICENSE-2.0),
+unless otherwise noted.
 
 ## Instructions
 
