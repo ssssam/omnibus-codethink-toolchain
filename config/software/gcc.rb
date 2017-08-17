@@ -19,7 +19,7 @@ name "gcc"
 # It would be nice to use the real GCC version number here, but the
 # Omnibus Git fetcher uses this value as the ref name to fetch and
 # there appears to be no way to override that.
-default_version "codethink/fortran-extra-legacy-7.1"
+default_version "codethink/fortran-extra-legacy-7.2"
 
 source git: "https://github.com/CodethinkLabs/gcc/"
 
