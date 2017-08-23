@@ -101,3 +101,26 @@ and 64 bit binaries.
 
 GCC has its own notes about the [AIX operating
 system](https://gcc.gnu.org/install/specific.html#x-ibm-aix).
+
+If you are building using the GCC 4.8 binaries provided by IBM's "AIX Toolbox for
+Linux Applications", you will likely hit link failures that looks like this:
+
+    ld: 0711-380 STABSTRING ERROR: Symbol table entry 3236, object file libbackend.a[rs6000.o]
+    Length of stabstring in .debug section is invalid.
+    The stabstring is being deleted.
+
+This is [PR2714](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=2714), which is
+fixed since GCC 5.1. If you don't have any way to get hold of GCC 5.1 binaries,
+you can bootstrap an up-to-date GCC compiler by disabling all debug info with
+the `-g0` flag. The command you need is something like this:
+
+    CFLAGS="-g0" CXXFLAGS="-g0" CC="gcc -g0" CXX="g++ -g0"
+    M4=/opt/freeware/bin/m4
+    ./configure --prefix=/opt/gcc-bootstrap --disable-bootstrap \
+                --disable-multilib --disable-nls --enable-languages=c,c++
+    gmake
+    gmake install
+
+You can then build the Omnibus package using this compiler, by setting
+`CC=/opt/gcc-bootstrap/bin/gcc CXX=/opt/gcc-bootstrap/bin/g++` in the environment
+when calling it.
