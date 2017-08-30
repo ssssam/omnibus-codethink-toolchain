@@ -102,6 +102,25 @@ and 64 bit binaries.
 GCC has its own notes about the [AIX operating
 system](https://gcc.gnu.org/install/specific.html#x-ibm-aix).
 
+#### Fixing the rpm macros
+
+Omnibus expects `rpmbuild` to produce packages with a certain filename. On AIX,
+the RPM configuration doesn't match what Omnibus expects and so you will see
+packaging errors like this:
+
+    Could not locate or access the package at the given path:
+
+    /home/code/autobuild/gcc-package/local/pkg/codethink-toolchain-7.2.0-1.aix7.1.powerpc.rpm
+
+The rather ugly fix for this is to override the `_build_name_fmt` RPM macro,
+and change it to: `%%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm`.
+The simplest way to do this is edit the `/usr/lib/rpm/macros` file. If that
+fills you with horror, you can try to figure out how to make Omnibus call
+`rpmbuild -D"_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm"`
+when it builds the package to avoid needing to edit the global RPM macros file.
+
+#### Bootstrapping from GCC 4.8
+
 If you are building using the GCC 4.8 binaries provided by IBM's "AIX Toolbox for
 Linux Applications", you will likely hit link failures that looks like this:
 
