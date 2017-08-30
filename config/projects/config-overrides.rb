@@ -12,8 +12,8 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
   compiler_flags = 
     case platform
     when "aix"
-      # Chef Software use the IBM compiler on AIX, but it's probably more
-      # reliable for us to compile GCC with GCC.
+      # Chef Software use the IBM compiler on AIX, but it is unable
+      # to compile GCC.
       #
       # We build a 32-bit GCC on AIX. A 64-bit compile is apparently
       # unsupported[1]. Certainly, adding -maix64 to CFLAGS, CXXFLAGS
@@ -29,8 +29,8 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
       # [1]. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25119
       {
 	"ARFLAGS" => "",  # overriding -X64
-        "CC" => "gcc",
-        "CXX" => "g++",
+        "CC" => ENV['CC'] || "gcc",
+        "CXX" => ENV['CXX'] || "g++",
         "CFLAGS" => "-I#{install_dir}/include -O2",
         "LDFLAGS" => "-L#{install_dir}/lib",
         "LD" => "ld",
@@ -38,8 +38,8 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
       }
     when "solaris2"
       {
-        "CC" => "gcc",
-        "CXX" => "g++",
+        "CC" => ENV['CC'] || "gcc",
+        "CXX" => ENV['CXX'] || "g++",
         "CFLAGS" => "-I#{install_dir}/include -O2",
         "LDFLAGS" => "-R#{install_dir}/lib -L#{install_dir}/lib",
       }
