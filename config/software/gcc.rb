@@ -40,9 +40,6 @@ build do
     "--prefix=#{install_dir}",
     "--enable-languages=c,c++,fortran",
     "--with-pkgversion=codethink-toolchain",
-    # The bootstrap functions as a self-test, but we assume that if you are
-    # building a package you already tested the commit being built.
-    "--disable-bootstrap",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
     ]
@@ -62,6 +59,15 @@ build do
     configure_command += ["--disable-multilib"]
   else
     configure_command += ["--enable-multilib"]
+  end
+
+  if ! aix?
+    # The bootstrap functions as a self-test, but we assume that if you are
+    # building a package you already tested the commit being built.
+    #
+    # However, on AIX, doing this breaks the C++11 <thread> library:
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82033
+    configure_command = ["--disable-bootstrap"]
   end
 
   if solaris?
