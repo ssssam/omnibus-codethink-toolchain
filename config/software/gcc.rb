@@ -40,35 +40,12 @@ build do
     "--prefix=#{install_dir}",
     "--enable-languages=c,c++,fortran",
     "--with-pkgversion=codethink-toolchain",
+    # The bootstrap functions as a self-test, but we assume that if you are
+    # building a package you already tested the commit being built.
+    "--disable-bootstrap",
     # This is (a) for speed, (b) because the embedded libintl breaks on AIX
     "--disable-nls",
     ]
-
-  # Ideally we want to be able to produce 32- and 64-bit binaries on all
-  # platforms.
-  #
-  # Currently the multilib build for GCC on AIX is broken so we can only
-  # produce 32-bit versions of the support libraries on that platform, and thus
-  # only 32-bit binaries. The first issue appears to be that both 32-bit and
-  # 64-bit AIX are called powerpc-ibm-aix7.2.0.0 so the 32-bit and 64-bit
-  # versions of the libraries are muddled together.
-  #
-  # There's actually no support for multilib on Solaris at this point.
-  # Enabling it is harmless but we still only get the 32bit libraries.
-  if aix?
-    configure_command += ["--disable-multilib"]
-  else
-    configure_command += ["--enable-multilib"]
-  end
-
-  if ! aix?
-    # The bootstrap functions as a self-test, but we assume that if you are
-    # building a package you already tested the commit being built.
-    #
-    # However, on AIX, doing this breaks the C++11 <thread> library:
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82033
-    configure_command = ["--disable-bootstrap"]
-  end
 
   if solaris?
     # All this is required to make multilib work on Solaris. The architecture
