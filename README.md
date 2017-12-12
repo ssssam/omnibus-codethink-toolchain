@@ -3,12 +3,7 @@
 This is an example of building and packaging the GNU toolchain on multiple
 platforms using Chef Software's [Omnibus](https://github.com/chef/omnibus/).
 
-Our aim is to provide the C, C++ and Fortran compilers from GCC version 7 on
-several platforms, including:
-
-  * Red Hat Linux
-  * Oracle Solaris
-  * IBM AIX
+Our aim is to provide the C, C++ and Fortran compilers from GCC version 7.
 
 This project is not directly based on the Chef Software
 [omnibus-software](https://github.com/chef/omnibus-software)
@@ -66,80 +61,3 @@ to output 32-bit binaries by passing `-m32`. This is a little-endian platform.
 
 If you need 32-bit toolchain binaries, the simplest solution is to build the
 package on an x86_32 host instead. Multilib should work there too.
-
-### sparc-sun-solaris2.11
-
-We build 32-bit toolchain binaries, but the compilers default to producing
-64-bit SPARCv9 output. You can pass `-m32` to produce 32-bit binaries instead,
-and multilib is supported so this should work for all cases. This is a
-big-endian platform.
-
-Some (e.g. [Gentoo](https://wiki.gentoo.org/wiki/Sparc/Multilib)) say 32-bit is
-still preferred on Solaris except for processes that need more than 4GB data or
-where performance will be better. Performance might be better with 64-bit
-toolchain binaries, but I haven't tested that.
-
-GCC has its own notes about the
-[Solaris operating system](https://gcc.gnu.org/install/specific.html#x-x-solaris2)
-and the [SPARC processor family](https://gcc.gnu.org/install/specific.html#sparc-x-x).
-
-### powerpc-ibm-aix7.2
-
-We build 32-bit toolchain binaries. The compiler doesn't yet support multilib,
-there seem to be issues with this on AIX although the [GCC manual's 'configure'
-section](https://gcc.gnu.org/install/configure.html) does suggest that it is
-supported on this platforn.
-
-Building 64-bit toolchain binaries on AIX appears to be unsupported upstream
-at the time of writing.  See this [bug from
-2005](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25119) for example. Passing
-`--host=ppc64-` to configure has no effect. Forcibly adding `-maix64` to the
-compile flags, `-X64` to the link and archive flags, and `OBJECT_MODE=64` in
-the environment might work but some of these flags get lost by the nested
-configure scripts and the build eventually fails due to having a mix of 32
-and 64 bit binaries.
-
-GCC has its own notes about the [AIX operating
-system](https://gcc.gnu.org/install/specific.html#x-ibm-aix).
-
-#### Fixing the rpm macros
-
-Omnibus expects `rpmbuild` to produce packages with a certain filename. On AIX,
-the RPM configuration doesn't match what Omnibus expects and so you will see
-packaging errors like this:
-
-    Could not locate or access the package at the given path:
-
-    /home/code/autobuild/gcc-package/local/pkg/codethink-toolchain-7.2.0-1.aix7.1.powerpc.rpm
-
-The rather ugly fix for this is to override the `_build_name_fmt` RPM macro,
-and change it to: `%%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm`.
-The simplest way to do this is edit the `/usr/lib/rpm/macros` file. If that
-fills you with horror, you can try to figure out how to make Omnibus call
-`rpmbuild -D"_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm"`
-when it builds the package to avoid needing to edit the global RPM macros file.
-
-#### Bootstrapping from GCC 4.8
-
-If you are building using the GCC 4.8 binaries provided by IBM's "AIX Toolbox for
-Linux Applications", you will likely hit link failures that looks like this:
-
-    ld: 0711-380 STABSTRING ERROR: Symbol table entry 3236, object file libbackend.a[rs6000.o]
-    Length of stabstring in .debug section is invalid.
-    The stabstring is being deleted.
-
-This is [PR2714](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=2714), which is
-fixed since GCC 5.1. If you don't have any way to get hold of GCC 5.1 binaries,
-you can bootstrap an up-to-date GCC compiler by disabling all debug info with
-the `-g0` flag. The command you need is something like this:
-
-    CFLAGS="-g0" CXXFLAGS="-g0" CC="gcc -g0" CXX="g++ -g0"
-    M4=/opt/freeware/bin/m4
-    ./configure --prefix=/opt/gcc-bootstrap --disable-bootstrap \
-                --disable-multilib --disable-nls --enable-languages=c,c++
-    gmake
-    gmake install
-
-You can then build the Omnibus package using this compiler, by setting
-`CC=/opt/gcc-bootstrap/bin/gcc CXX=/opt/gcc-bootstrap/bin/g++` in the environment
-when calling it.
