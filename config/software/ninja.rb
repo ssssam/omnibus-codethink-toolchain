@@ -13,22 +13,16 @@
 # limitations under the License.
 #
 
-name "codethink-llvm"
-maintainer "Codethink Ltd."
-homepage "https://www.github.com/CodethinkLabs/omnibus-codethink-toolchain/"
+name "ninja"
+default_version "release"
 
-install_dir "/opt/codethink-llvm"
+source git: "git://github.com/ninja-build/ninja.git"
 
-build_version do
-  source :version, from_dependency: 'llvm'
+relative_path "ninja"
+
+build do
+  env = with_standard_compiler_flags(with_embedded_path)
+  mkdir "#{install_dir}/embedded/bin"
+  command "./configure.py --bootstrap", env: env
+  command "cp ninja #{install_dir}/embedded/bin", env: env
 end
-build_iteration 1
-
-# toolchain dependencies/components
-dependency "llvm"
-
-# Version manifest file
-dependency "version-manifest"
-
-exclude "**/.git"
-exclude "**/bundler/git"
