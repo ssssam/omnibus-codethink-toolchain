@@ -13,36 +13,33 @@
 # limitations under the License.
 #
 
-name "llvm"
-default_version "5.0.1"
+name "flang"
+default_version "master"
 
-source :url => "http://releases.llvm.org/#{version}/llvm-#{version}.src.tar.xz",
-       :md5 => "3a4ec6dcbc71579eeaec7cb157fe2168"
+source git: "https://github.com/flang-compiler/flang.git"
 
-dependency "ninja"
-dependency "zlib"
-dependency "ncurses"
+dependency "llvm"
+dependency "clang-for-flang"
+dependency "openmp-llvm"
 
-relative_path "llvm-#{version}.src"
-
-llvm_build_dir = "#{build_dir}/build-llvm"
+flang_build_dir = "#{build_dir}/build-flang"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  mkdir llvm_build_dir
+  mkdir flang_build_dir
 
   command "cmake3" \
-    " -G Ninja" \
+    " -DLLVM_CONFIG=#{install_dir}/bin/llvm-config" \
+    " -DFLANG_LIBOMP=#{install_dir}/lib/libomp.so" \
     " -DCMAKE_BUILD_TYPE=Release" \
-    " -DBUILD_SHARED_LIBS=OFF" \
-    " -DCMAKE_C_COMPILER=#{'$(which gcc)'}" \
-    " -DCMAKE_CXX_COMPILER=#{'$(which g++)'}" \
+    " -DCMAKE_C_COMPILER=#{install_dir}/bin/clang" \
+    " -DCMAKE_CXX_COMPILER=#{install_dir}/bin/clang++" \
+    " -DCMAKE_Fortran_COMPILER=#{install_dir}/bin/flang" \
     " -DCMAKE_INSTALL_PREFIX=#{install_dir}" \
-    " -DPYTHON_EXECUTABLE=#{'$(which python)'}" \
-    " -DLLVM_TARGETS_TO_BUILD=X86" \
-    " #{project_dir}", env: env, cwd: llvm_build_dir
-  
-  command "ninja -j #{workers}", env: env, cwd: llvm_build_dir
-  command "ninja -j #{workers} install", env: env, cwd: llvm_build_dir
+    " -DCMAKE_INSTALL_RPATH=#{install_dir}/lib" \
+    " #{project_dir}", env: env, cwd: flang_build_dir
+   
+  make "-j #{workers}", env: env, cwd: flang_build_dir
+  make "-j #{workers} install", env: env, cwd: flang_build_dir
 
 end

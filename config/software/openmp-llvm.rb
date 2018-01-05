@@ -13,36 +13,27 @@
 # limitations under the License.
 #
 
-name "llvm"
-default_version "5.0.1"
+name "openmp-llvm"
+default_version "release_50"
 
-source :url => "http://releases.llvm.org/#{version}/llvm-#{version}.src.tar.xz",
-       :md5 => "3a4ec6dcbc71579eeaec7cb157fe2168"
+source git: "https://github.com/llvm-mirror/openmp.git"
 
 dependency "ninja"
-dependency "zlib"
-dependency "ncurses"
 
-relative_path "llvm-#{version}.src"
-
-llvm_build_dir = "#{build_dir}/build-llvm"
+openmp_llvm_dir = "#{build_dir}/build-openmp-llvm"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  mkdir llvm_build_dir
+  mkdir openmp_llvm_dir
 
   command "cmake3" \
     " -G Ninja" \
-    " -DCMAKE_BUILD_TYPE=Release" \
+    " -DLIBOMP_LLVM_LIT_EXECUTABLE=/home/build/omnibus/omnibus-codethink-toolchain/local/build/codethink-flang/build-llvm/bin/llvm-lit" \
     " -DBUILD_SHARED_LIBS=OFF" \
-    " -DCMAKE_C_COMPILER=#{'$(which gcc)'}" \
-    " -DCMAKE_CXX_COMPILER=#{'$(which g++)'}" \
     " -DCMAKE_INSTALL_PREFIX=#{install_dir}" \
-    " -DPYTHON_EXECUTABLE=#{'$(which python)'}" \
-    " -DLLVM_TARGETS_TO_BUILD=X86" \
-    " #{project_dir}", env: env, cwd: llvm_build_dir
-  
-  command "ninja -j #{workers}", env: env, cwd: llvm_build_dir
-  command "ninja -j #{workers} install", env: env, cwd: llvm_build_dir
-
+    " -DCMAKE_BUILD_TYPE=Release" \
+    " #{project_dir}", env: env, cwd: openmp_llvm_dir
+      
+  command "ninja -j #{workers}", env: env, cwd: openmp_llvm_dir
+  command "ninja -j #{workers} install", env: env, cwd: openmp_llvm_dir
 end

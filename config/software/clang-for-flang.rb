@@ -13,36 +13,33 @@
 # limitations under the License.
 #
 
-name "llvm"
-default_version "5.0.1"
+name "clang-for-flang"
+default_version "flang_release_50"
 
-source :url => "http://releases.llvm.org/#{version}/llvm-#{version}.src.tar.xz",
-       :md5 => "3a4ec6dcbc71579eeaec7cb157fe2168"
+source git: "https://github.com/flang-compiler/clang.git"
 
 dependency "ninja"
-dependency "zlib"
-dependency "ncurses"
+dependency "llvm"
 
-relative_path "llvm-#{version}.src"
-
-llvm_build_dir = "#{build_dir}/build-llvm"
+clang_for_flang_build_dir = "#{build_dir}/build-clang-for-flang"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  mkdir llvm_build_dir
+  mkdir clang_for_flang_build_dir
 
   command "cmake3" \
     " -G Ninja" \
-    " -DCMAKE_BUILD_TYPE=Release" \
+    " -DLLVM_CONFIG=#{install_dir}/bin/llvm-config" \
     " -DBUILD_SHARED_LIBS=OFF" \
+    " -DCMAKE_BUILD_TYPE=Release" \
+    " -DCMAKE_INSTALL_PREFIX=#{install_dir}" \
+    " -DLLVM_TARGETS_TO_BUILD=X86" \
     " -DCMAKE_C_COMPILER=#{'$(which gcc)'}" \
     " -DCMAKE_CXX_COMPILER=#{'$(which g++)'}" \
-    " -DCMAKE_INSTALL_PREFIX=#{install_dir}" \
-    " -DPYTHON_EXECUTABLE=#{'$(which python)'}" \
-    " -DLLVM_TARGETS_TO_BUILD=X86" \
-    " #{project_dir}", env: env, cwd: llvm_build_dir
-  
-  command "ninja -j #{workers}", env: env, cwd: llvm_build_dir
-  command "ninja -j #{workers} install", env: env, cwd: llvm_build_dir
-
+    " -DGCC_INSTALL_PREFIX=/opt/rh/devtoolset-7/root/usr" \
+    " -DCMAKE_CXX_LINK_FLAGS='-L$$/opt/rh/devtoolset-7/root/usr/lib64 -Wl,-rpath,$$/opt/rh/devtoolset-7/root/usr/lib64'" \
+    " #{project_dir}", env: env, cwd: clang_for_flang_build_dir
+      
+  command "ninja -j #{workers}", env: env, cwd: clang_for_flang_build_dir
+  command "ninja -j #{workers} install", env: env, cwd: clang_for_flang_build_dir
 end
