@@ -47,37 +47,6 @@ build do
     "--disable-nls",
     ]
 
-  if solaris?
-    # All this is required to make multilib work on Solaris. The architecture
-    # is autodetected as 'sparc' but the multlib option is silently ignored
-    # in that case. If we force 'sparcv9' it works. Except that the build
-    # then fails at zlib -- we work around that by using the system version
-    # of zlib (which is a good idea anyway).
-    configure_command += ["--build=sparcv9-sun-solaris2.11",
-                          "--host=sparcv9-sun-solaris2.11",
-                          "--target=sparcv9-sun-solaris2.11",
-                          "--with-system-zlib"]
-  end
-
-  if not solaris? and not aix?
-    # Useful C++ debugging feature, see `-fvtable-verify=` option.
-    configure_command += ["--enable-vtable-verify"]
-  end
-
-  if solaris?
-    # Only the GNU version of M4 can be used
-    env["M4"] = "gm4"
-    # Configure with GNU linker instead of Solaris (default)
-    configure_command += ["--with-gnu-ld", "--with-ld=#{install_dir}/bin/ld"]
-    # Configure with GNU assembler instead of Solaris (default)
-    configure_command += ["--with-gnu-as", "--with-as=#{install_dir}/bin/as"]
-  end
-
-  if aix?
-    # Only the GNU version of M4 can be used
-    env["M4"] = "/opt/freeware/bin/m4"
-  end
-
   command configure_command.join(" "), env: env
   make "-j #{workers}", env: env, timeout: 14400
   make "-j #{workers} install", env: env
