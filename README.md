@@ -1,9 +1,10 @@
-# Codethink's Omnibus packaging for the GNU Toolchain
+# Codethink's Omnibus packaging for the GNU and LLVM Toolchains.
 
-This is an example of building and packaging the GNU toolchain on multiple
-platforms using Chef Software's [Omnibus](https://github.com/chef/omnibus/).
+This is an example of building and packaging the GNU and LLVM toolchains
+on x86_64 platform using Chef Software's [Omnibus](https://github.com/chef/omnibus/).
 
-Our aim is to provide the C, C++ and Fortran compilers from GCC version 7.
+Our aim is to provide the C, C++ and Fortran compilers from GCC version 7 and
+LLVM 5.x.x suite (Clang, PGI's Flang).
 
 This project is not directly based on the Chef Software
 [omnibus-software](https://github.com/chef/omnibus-software)
@@ -22,6 +23,9 @@ unless otherwise noted.
 This README doesn't cover installing the necessary dependencies. In brief
 you need a working GNU toolchain, GNU Flex, Ruby, Bundler and Omnibus. Maybe
 more.
+
+For LLVM toolchain, you also need GNU toolchain 4.8 (or higher), cmake 3.4.3
+(or higher) and python (at least 2.7).
 
 On Red Hat style systems we also require the rpm-build package.
 
@@ -50,6 +54,10 @@ You can change the number of parallel workers by adding `workers:N` to the
 `make -j 2`, you would run:
 
     omnibus build codethink-toolchain --override base_dir:./local workers:2
+
+To run the same for PGI's Flang, you would execute:
+
+    omnibus build codethink-flang --override base_dir:./local workers:2
 
 ## Platform notes
 
