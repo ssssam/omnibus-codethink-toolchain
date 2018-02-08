@@ -28,6 +28,7 @@ dependency "gmp"
 dependency "mpfr"
 dependency "mpc"
 dependency "libiconv"
+dependency "autogen"
 
 if solaris?
   dependency "binutils"
@@ -55,4 +56,5 @@ build do
   command configure_command.join(" "), env: env
   make "-j #{workers}", env: env, timeout: 14400
   make "-j #{workers} install", env: env
+  make "-j #{workers} check", env: env
 end
