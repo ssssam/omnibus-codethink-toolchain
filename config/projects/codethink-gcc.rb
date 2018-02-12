@@ -20,7 +20,9 @@ homepage "https://www.github.com/CodethinkLabs/omnibus-codethink-toolchain/"
 
 install_dir "/opt/codethink-gcc"
 
-build_version "7.2.0"
+build_version do
+  source :version, from_dependency: 'gcc'
+end
 build_iteration 1
 
 # toolchain dependencies/components
