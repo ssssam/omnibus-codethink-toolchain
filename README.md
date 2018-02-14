@@ -33,11 +33,12 @@ On Red Hat style systems we also require the rpm-build package.
 
 You can run Omnibus from your own user account, or some kind of dedicated
 'build' user if you prefer. Omnibus requires access to the package install
-directory which is set as `/opt/codethink` so you'll need to create this
-in advance and give write access to the correct user. For example:
+directory which is set as `/opt/codethink-$PACKAGE_NAME` so you'll need to
+create this in advance and give write access to the correct user.
+For example:
 
-    sudo mkdir /opt/codethink-toolchain
-    sudo chown $(whoami):$(whoami) /opt/codethink-toolchain
+    sudo mkdir /opt/codethink-gcc
+    sudo chown $(whoami):$(whoami) /opt/codethink-gcc
 
 Omnibus defaults to using /var/cache/omnibus for its intermediate files. You
 can make it use a local directory instead by adding this to the commandline:
@@ -49,11 +50,15 @@ will not require root privileges to install.
 
 ### Optional stuff
 
+To build gcc package you will need to set up OMNIBUS_GCC_GIT_REF environment
+variable with a valid reference (branch, tag, ref) for the gcc repository is
+meant to be build.
+
 You can change the number of parallel workers by adding `workers:N` to the
 --override parameter. For example, to set a base dir of ./local and enforce
 `make -j 2`, you would run:
 
-    omnibus build codethink-toolchain --override base_dir:./local workers:2
+    OMNIBUS_GCC_GIT_REF=master omnibus build codethink-gcc --override base_dir:./local workers:2
 
 To run the same for PGI's Flang, you would execute:
 
