@@ -1,5 +1,5 @@
 #
-# Copyright 2017 Codethink Ltd.
+# Copyright 2017,2018 Codethink Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
 # limitations under the License.
 #
 
-name "codethink-toolchain"
+name "codethink-gcc"
 maintainer "Codethink Ltd."
 homepage "https://www.github.com/CodethinkLabs/omnibus-codethink-toolchain/"
 
-install_dir "/opt/codethink-toolchain"
+install_dir "/opt/codethink-gcc"
 
-build_version "7.2.0"
+build_version do
+  source :version, from_dependency: 'gcc'
+end
 build_iteration 1
 
 # toolchain dependencies/components

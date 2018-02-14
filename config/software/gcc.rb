@@ -1,5 +1,6 @@
+#
 # Omnibus::Software definition to build the GNU Compiler Collection.
-# Copyright 2017 Codethink Ltd.
+# Copyright 2017,2018 Codethink Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ name "gcc"
 # It would be nice to use the real GCC version number here, but the
 # Omnibus Git fetcher uses this value as the ref name to fetch and
 # there appears to be no way to override that.
-default_version "codethink/fortran-extra-legacy-7.2"
+default_version "#{ENV['OMNIBUS_GCC_GIT_REF']}"
 
 source git: "https://github.com/CodethinkLabs/gcc/"
 
@@ -30,6 +31,10 @@ dependency "libiconv"
 
 if solaris?
   dependency "binutils"
+end
+
+if default_version.to_s.strip.empty?
+  abort("\n\tERROR: OMNIBUS_GCC_GIT_REF is empty. \n\tPlease, set OMNIBUS_GCC_GIT_REF with a valid git ref.")
 end
 
 build do
