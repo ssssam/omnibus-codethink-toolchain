@@ -29,6 +29,7 @@ dependency "mpfr"
 dependency "mpc"
 dependency "libiconv"
 dependency "autogen"
+dependency "dejagnu"
 
 if solaris?
   dependency "binutils"
