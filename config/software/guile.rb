@@ -28,9 +28,9 @@ relative_path "guile-#{version}"
 
 build do
   env = with_codethink_compiler_flags(ohai["platform"], with_embedded_path)
-  env["CFLAGS"]  += " -I/opt/codethink-toolchain/embedded/include"
-  env["LDFLAGS"] += " -L/opt/codethink-toolchain/embedded/lib"
-  env["PKG_CONFIG_PATH"] += " /opt/codethink-toolchain/lib/pkgconfig/"
+  env["CFLAGS"]  += " -I/opt/codethink-gcc/embedded/include"
+  env["LDFLAGS"] += " -L/opt/codethink-gcc/embedded/lib"
+  env["PKG_CONFIG_PATH"] += " /opt/codethink-gcc/lib/pkgconfig/"
 
   configure_command = [
     "./configure --prefix=#{install_dir}",

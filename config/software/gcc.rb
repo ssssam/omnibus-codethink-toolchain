@@ -46,7 +46,7 @@ build do
     "./configure",
     "--prefix=#{install_dir}",
     "--enable-languages=c,c++,fortran",
-    "--with-pkgversion=codethink-toolchain",
+    "--with-pkgversion=codethink-gcc",
     # The bootstrap functions as a self-test, but we assume that if you are
     # building a package you already tested the commit being built.
     "--disable-bootstrap",
