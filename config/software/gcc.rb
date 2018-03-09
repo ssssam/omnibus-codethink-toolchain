@@ -22,7 +22,7 @@ name "gcc"
 # there appears to be no way to override that.
 default_version "#{ENV['OMNIBUS_GCC_GIT_REF']}"
 
-source git: "https://github.com/CodethinkLabs/gcc/"
+source git: "https://gitlab.com/CodethinkLabs/gcc/"
 
 dependency "gmp"
 dependency "mpfr"
