@@ -28,10 +28,7 @@ dependency "gmp"
 dependency "mpfr"
 dependency "mpc"
 dependency "libiconv"
-
-if solaris?
-  dependency "binutils"
-end
+dependency "binutils"
 
 if default_version.to_s.strip.empty?
   abort("\n\tERROR: OMNIBUS_GCC_GIT_REF is empty. \n\tPlease, set OMNIBUS_GCC_GIT_REF with a valid git ref.")
